@@ -7,38 +7,45 @@ using System.Windows;
 using Microsoft.Win32;
 using System.IO;
 
-// проверка слов целиком
-// ё
-// большие-маленькие буквы
 namespace JapanWordsQuiz
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
 
-    internal class ListElem
+    /*internal class ListElem
     {
         public List<String[]> elems;
         public ListElem()
         {
             elems = new List<string[]>();
         }
+    }*/
+    internal class DictValue
+    {
+        public string[][] line;
+        public DictValue(int default_size)
+        {
+            line = new string[default_size][];
+        }
     }
     public partial class MainWindow : Window
     {
-        List<ListElem> dict_list = new List<ListElem>();
-        EventWaitHandle handle = new AutoResetEvent(false);
+        //List<ListElem> dict_list = new List<ListElem>();
+        // if kana -> rus mode, then
+        int default_size = 3;
+        Dictionary<int, DictValue> dict = new Dictionary<int, DictValue>();
+        string[] true_answers;
         const int SHIFT = 1;
-        int dict_len, split_constr, num_of_ans, curr_index;
+        int dict_len, num_of_ans, num_of_quest, curr_index;
         //int[] key_indexes, value_indexes;
         //string curr_hiragana, curr_kanzi;
         public MainWindow()
         {
             InitializeComponent();
-            split_constr = 4;
+            button2.IsEnabled = false;
+            num_of_quest = 0;
             num_of_ans = 2;
-            //key_indexes = new int[] { 1, 2 };
-            //value_indexes = new int[] { 3 };
         }
     
         private void button_Click(object sender, RoutedEventArgs e)
@@ -59,38 +66,55 @@ namespace JapanWordsQuiz
                         for (int i = 0; i < SHIFT; sr.ReadLine(), i++) ;
                         for (int counter = SHIFT; counter <= dict_len; counter++)
                         {
-                            ListElem elem = AnalyseLine(sr.ReadLine());
-                            dict_list.Add(elem);
+                            AnalyseLine(sr.ReadLine(), out int key, out DictValue value);
+                            dict[key] = value;
                         }
                     }
                 }
                 catch (ArgumentException ex)
                 {
                     MessageBox.Show("Возникла ошибка: " + ex.Message);
+                    return;
                 }
-                MessageBox.Show(dict_list.Count.ToString());
-                handle.Set();
+                button2.IsEnabled = true;
+                textBlock1.Text = "";
+                textBlock2.Text = "";
             }
         }
 
         private void LetNewWord()
         {
             Random r = new Random();
-            curr_index = r.Next(dict_len);
-            textBlock1.Text = dict_list[curr_index].elems[0]/*column in table*/[0]/*num of word*/;
+            curr_index = r.Next(1, dict_len);
+            true_answers = (string[])dict[curr_index].line[num_of_ans].Clone();//(string[])dict[curr_index].line[num_of_ans].Clone();
+            if (num_of_ans == 2)
+            {
+                for (int i = 0; i < true_answers.Length; i++)
+                {
+                    true_answers[i] = true_answers[i].ToUpper().Replace("ё", "е");
+                }
+            }
+            textBlock1.Text = dict[curr_index].line[0][0]; //dict_list[curr_index].elems[0]/*column in table*/[0]/*num of word*/;
+            textBlock1.Text += " " + dict[curr_index].line[1][0];
         }
 
-        private ListElem AnalyseLine(string line)
+        private void button2_Click(object sender, RoutedEventArgs e)
         {
-            line = line.TrimStart().TrimEnd();
+            button2.IsEnabled = false;
+            LetNewWord();
+        }
+
+        private void AnalyseLine(string line, out int key, out DictValue value)
+        {
+            line = line.TrimStart('\"').TrimEnd('\"');
             string[] str_arr = line.Split(new string[] { "\",\"" }, StringSplitOptions.None);
-            ListElem temp_elem = new ListElem();
-            for (int i = 1; i < split_constr; i++)
+            key = Int32.Parse(str_arr[0]);
+            value = new DictValue(default_size);
+            for (int i = 1; i <= default_size; i++)
             {
                 string[] str_arr2 = str_arr[i].Split(new string[] { ", " }, StringSplitOptions.None);
-                temp_elem.elems.Add(str_arr2);
+                value.line[i - 1] = str_arr2;
             }
-            return temp_elem;
             /*try
             {
 
@@ -109,19 +133,21 @@ namespace JapanWordsQuiz
             }*/
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            await Task.Run( () => handle.WaitOne());
-            LetNewWord();
-        }
-
         private async void button1_Click(object sender, RoutedEventArgs e)
         {
-            string[] true_answer = dict_list[curr_index].elems[num_of_ans];
-            if (true_answer.Contains(textBox1.Text))
+            if (dict.Count == 0) return;
+            string user_answer = textBox1.Text;
+            if (user_answer == "")
+            {
+                MessageBox.Show("Введите слово.");
+                return;
+            }
+            if (num_of_ans == 2)
+                user_answer = user_answer.ToUpper().Replace("ё", "е");
+            if (true_answers.Contains(user_answer))
             {
                 textBlock2.Text = "Правильно!";
-                dict_list.Remove(dict_list[curr_index]);
+                dict.Remove(curr_index);
                 dict_len--;
                 textBox.Text = dict_len.ToString();
             }
