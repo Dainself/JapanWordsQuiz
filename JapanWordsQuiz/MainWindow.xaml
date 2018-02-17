@@ -5,24 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JapanWordsQuiz"
         mc:Ignorable="d"
-        Title="MainWindow" Height="262.5" Width="525">
+        Title="Japan Words Quiz" Height="272.5" Width="525" ResizeMode="CanMinimize" Icon="a.ico">
     <Grid>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="12,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Количество с"/><Run Text="лов"/><Run Text=":"/></TextBlock>
-        <TextBox x:Name="dict_len_textblock" HorizontalAlignment="Left" Height="22" Margin="126,122,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="52"/>
-        <TextBlock x:Name="question_text_block" HorizontalAlignment="Left" Margin="212,24,0,0" TextWrapping="Wrap" FontSize="25" VerticalAlignment="Top" Height="39" Width="157" Text="あ"/>
-        <TextBox x:Name="answer_text_box" HorizontalAlignment="Left" Height="23" Margin="212,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="126"/>
-        <Button x:Name="OK_button" Content="OK" HorizontalAlignment="Left" Margin="343,69,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.312,-2.568" Click="OK_button_Click"/>
-        <TextBlock x:Name="status_text_block" FontSize="14" HorizontalAlignment="Left" Margin="374,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="95" Text="..."/>
-        <Button x:Name="StartButton" Content="Начать &gt;&gt;" HorizontalAlignment="Left" Margin="71,156,0,0" VerticalAlignment="Top" Width="68" Height="25" Click="StartButton_Click"/>
-        <Button x:Name="button3" Content="Button" HorizontalAlignment="Left" Margin="406,197,0,0" VerticalAlignment="Top" Width="75" Click="button3_Click"/>
-        <TextBlock x:Name="textBlock3" FontSize="15" HorizontalAlignment="Left" Margin="13,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold"><Run Text="Режим "/><Run Text="теста"/></TextBlock>
-        <RadioButton x:Name="radioButton" Content="Слова на хирагане -&gt; Русский" GroupName="Mode" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
-        <RadioButton x:Name="radioButton1" Content="Слова с кандзи -&gt; Русский" GroupName="Mode" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
-        <RadioButton x:Name="radioButton2" Content="Русский -&gt; Слова на хирагане" GroupName="Mode" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
-        <RadioButton x:Name="radioButton3" Content="Кандзи -&gt; Он/Кун" GroupName="Mode" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
-        <Button x:Name="back_button" Content=" &lt;&lt; Выбрать другой тест" HorizontalAlignment="Left" Margin="221,156,0,0" VerticalAlignment="Top" Width="148" Height="25"/>
-        <TextBlock x:Name="textBlock4" HorizontalAlignment="Left" Margin="212,102,0,0" TextWrapping="Wrap" Text="Слов осталось:" VerticalAlignment="Top"/>
-        <TextBlock x:Name="count_text_block" HorizontalAlignment="Left" Margin="299,102,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="31"/>
-
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="12,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Количество с"/><Run Text="лов"/><Run Text=":"/></TextBlock>
+        <TextBox x:Name="dict_len_textblock" HorizontalAlignment="Left" Height="22" Margin="126,133,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="52"/>
+        <TextBlock x:Name="question_text_block" HorizontalAlignment="Left" Margin="212,35,0,0" TextWrapping="Wrap" FontSize="25" VerticalAlignment="Top" Height="39" Width="278" Text="あ"/>
+        <TextBox x:Name="answer_text_box" HorizontalAlignment="Left" Height="23" Margin="212,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="126"/>
+        <Button x:Name="OK_button" Content="OK" HorizontalAlignment="Left" Margin="343,80,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.312,-2.568" Click="OK_button_Click"/>
+        <TextBlock x:Name="status_text_block" FontSize="14" HorizontalAlignment="Left" Margin="395,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="95" Text="..."/>
+        <Button x:Name="StartButton" Content="Начать &gt;&gt;" HorizontalAlignment="Left" Margin="71,167,0,0" VerticalAlignment="Top" Width="68" Height="25" Click="StartButton_Click"/>
+        <TextBlock x:Name="textBlock3" FontSize="15" HorizontalAlignment="Left" Margin="13,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold"><Run Text="Режим "/><Run Text="теста"/></TextBlock>
+        <RadioButton x:Name="radioButton" Content="Слова на хирагане -&gt; Русский" GroupName="Mode" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
+        <RadioButton x:Name="radioButton1" Content="Слова с кандзи -&gt; Русский" GroupName="Mode" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
+        <RadioButton x:Name="radioButton2" Content="Русский -&gt; Слова на хирагане" GroupName="Mode" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
+        <RadioButton x:Name="radioButton3" Content="Кандзи -&gt; Он/Кун" GroupName="Mode" HorizontalAlignment="Left" Margin="10,113,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
+        <TextBlock x:Name="textBlock4" HorizontalAlignment="Left" Margin="212,113,0,0" TextWrapping="Wrap" Text="Слов осталось:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="count_text_block" HorizontalAlignment="Left" Margin="299,113,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="31"/>
+        <Image x:Name="image" Source="katana-tyan.png" HorizontalAlignment="Left" Height="128" Margin="357,107,0,0" VerticalAlignment="Top" Width="152"/>
+        <Button x:Name="back_button" Content=" &lt;&lt; Выбрать другой тест" HorizontalAlignment="Left" Margin="221,167,0,0" VerticalAlignment="Top" Width="148" Height="25" Click="back_button_Click">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0,1" Opacity="0.85" StartPoint="0,0">
+                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                    <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                    <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                    <GradientStop Color="#FFCDCDCD" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+            <Button.BorderBrush>
+                <SolidColorBrush Color="#FF101315"/>
+            </Button.BorderBrush>
+        </Button>
+        <Menu x:Name="menu" Height="21" VerticalAlignment="Top">
+            <MenuItem Header="Вид">
+                <MenuItem x:Name="image_switcher" Height="21" Header="Картинка в углу" IsCheckable="True" Click="image_switcher_Click" />
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem x:Name="app" Height="21" Header="О приложении" Click="app_Click"/>
+                <MenuItem x:Name="autor" Height="21" Header="Об авторе" Click="autor_Click"/>
+            </MenuItem>
+        </Menu>
     </Grid>
 </Window>
