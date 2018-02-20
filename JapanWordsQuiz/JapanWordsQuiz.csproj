@@ -113,5 +113,11 @@
   <ItemGroup>
     <Resource Include="katana-tyan.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ava.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="branch.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

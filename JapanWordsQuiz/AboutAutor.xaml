@@ -5,6 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JapanWordsQuiz"
         mc:Ignorable="d"
-        Title="Об авторе" Height="150" Width="240" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="a.ico">
-    <Grid/>
+        Title="Об авторе" Height="159.832" Width="311.898" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="a.ico">
+    <Grid>
+        <TextBlock TextAlignment="Center" FontSize="13" x:Name="textBlock" HorizontalAlignment="Left" Margin="115,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="112" Width="174">
+            Создатель программы -<LineBreak/><Run FontWeight="DemiBold">Dainself</Run><LineBreak/>Контакты:<LineBreak/>e-mail: MetalSl8@yandex.ru<LineBreak/>
+            vk: <Hyperlink x:Name="vk" NavigateUri="https://vk.com/dainself" Click="vk_Click">vk.com/dainself</Hyperlink>
+        </TextBlock>
+        <Image x:Name="image" Source="ava.jpg" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100"/>
+    </Grid>
 </Window>

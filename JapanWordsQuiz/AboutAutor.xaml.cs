@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,6 +23,12 @@ namespace JapanWordsQuiz
         public AboutAutor()
         {
             InitializeComponent();
+        }
+
+        private void vk_Click(object sender, RoutedEventArgs e)
+        {
+            string url = vk.NavigateUri.ToString();
+            Process.Start(url);
         }
     }
 }

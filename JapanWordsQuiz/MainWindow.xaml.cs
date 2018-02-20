@@ -33,6 +33,9 @@ namespace JapanWordsQuiz
             InitializeComponent();
             RightSideIsActivated(false);
             image.Visibility = Visibility.Hidden;
+            ans_for_user.Visibility = Visibility.Visible;
+            ans_switcher.IsChecked = true;
+            error_wait_time = 3000;
         }
 
         string[] true_answers2;
@@ -77,7 +80,15 @@ namespace JapanWordsQuiz
                 MessageBox.Show("Слишком большое число слов.");
                 return;
             }
-            dict = Deserialize(dict_num);
+            try
+            {
+                dict = Deserialize(dict_num);
+            }
+            catch (FileNotFoundException fnfe)
+            {
+                MessageBox.Show("Указанного файла нет в рабочей директории: " + fnfe.FileName);
+                return;
+            }
             LeftSideIsActivated(false);
             RightSideIsActivated(true);
             count_text_block.Text = dict_len.ToString();
@@ -190,6 +201,14 @@ namespace JapanWordsQuiz
             else image.Visibility = Visibility.Visible;
         }
 
+        private void answer_text_box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                OK_button_Click(null, null);
+            }
+        }
+
         private void button_Click(object sender, RoutedEventArgs e)
         {
             dict = new Dictionary<int, DictValue>();
@@ -202,6 +221,21 @@ namespace JapanWordsQuiz
                 }
             }
             Serialize();
+        }
+
+        private void ans_switcher_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ans_switcher.IsChecked)
+            {
+                ans_for_user.Visibility = Visibility.Hidden;
+                error_wait_time = 1000;
+            }
+            else
+            {
+                ans_for_user.Visibility = Visibility.Visible;
+                error_wait_time = 3000;
+            }
+
         }
 
         private void radioButton_Checked(object sender, RoutedEventArgs e)
@@ -237,6 +271,7 @@ namespace JapanWordsQuiz
             }
         }
 
+        int error_wait_time;
         private async void OK_button_Click(object sender, RoutedEventArgs e)
         {
             if (dict_len == 0) return;
@@ -245,36 +280,43 @@ namespace JapanWordsQuiz
                 MessageBox.Show("Введите слово.");
                 return;
             }
+            bool cond;
+            string ans_str;
             if (dict_num == 4)
             {
                 string[] user_anss = answer_text_box.Text.Split(new string[] { ", ", "、", "、 ", "，", "， " }, StringSplitOptions.None);
-                if (true_answers.Contains(user_anss[0]) && true_answers2.Contains(user_anss[1]))
-                {
-                    status_text_block.Text = "Правильно!";
-                    dict.Remove(dict.Keys.ElementAt(curr_index));
-                    dict_len--;
-                    count_text_block.Text = dict_len.ToString();
-                }
-                else status_text_block.Text = "Ошибка.";
+                ans_str = dict.Values.ElementAt(curr_index).line[num_of_ans][0] + ", " + 
+                    dict.Values.ElementAt(curr_index).line[addit_num_of_ans][0];
+                cond = true_answers.Contains(user_anss[0]) && true_answers2.Contains(user_anss[1]);
             }
             else
             {
                 string user_answer = answer_text_box.Text;
+                ans_str = dict.Values.ElementAt(curr_index).line[num_of_ans][0];
                 if (dict_num == 1 || dict_num == 2)
                     user_answer = user_answer.ToUpper().Replace("ё", "е");
-                if (true_answers.Contains(user_answer))
-                {
-                    status_text_block.Text = "Правильно!";
-                    dict.Remove(dict.Keys.ElementAt(curr_index));
-                    dict_len--;
-                    count_text_block.Text = dict_len.ToString();
-                }
-                else status_text_block.Text = "Ошибка.";
+                cond = true_answers.Contains(user_answer);
             }
             OK_button.IsEnabled = false;
             answer_text_box.Text = "";
-            await Task.Run(() => Thread.Sleep(1000));
+            if (cond)
+            {
+                status_text_block.Text = "Правильно!";
+                dict.Remove(dict.Keys.ElementAt(curr_index));
+                dict_len--;
+                count_text_block.Text = dict_len.ToString();
+                await Task.Run(() => Thread.Sleep(1000));
+            }
+            else
+            {
+                status_text_block.Text = "Ошибка.";
+                ans_for_user.Text += ans_str;
+                await Task.Run(() => Thread.Sleep(error_wait_time));
+            }
+            //OK_button.IsEnabled = false;
+            //answer_text_box.Text = "";
             question_text_block.Text = "";
+            ans_for_user.Text = "Ответ: ";
             OK_button.IsEnabled = true;
             if (dict_len > 0)
             {
@@ -294,7 +336,7 @@ namespace JapanWordsQuiz
             }
             MessageBox.Show(sb.ToString());*/
             BinaryFormatter formatter = new BinaryFormatter();
-            using (FileStream fs = new FileStream(@"C:\Users\user\source\repos\JapanWordsQuiz\dict_kanji.dat", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(".\\dict_kanji.dat", FileMode.OpenOrCreate))
             {
                 formatter.Serialize(fs, dict);
             }
@@ -304,8 +346,8 @@ namespace JapanWordsQuiz
         private Dictionary<int, DictValue> Deserialize(int dict_num)
         {
             Dictionary<int, DictValue> new_dict;
-            string path = (dict_num == 4) ? @"C:\Users\user\source\repos\JapanWordsQuiz\dict_kanji.dat" :
-                @"C:\Users\user\source\repos\JapanWordsQuiz\dict_goi.dat";
+            string path = (dict_num == 4) ? ".\\dict_kanji.dat" :
+                ".\\dict_goi.dat";
             BinaryFormatter formatter = new BinaryFormatter();
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {

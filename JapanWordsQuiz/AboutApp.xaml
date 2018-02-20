@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JapanWordsQuiz"
         mc:Ignorable="d"
-        Title="AboutApp" Height="150" Width="240">
+        Title="О приложении" Height="196.045" Width="322.623" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" Icon="a.ico">
     <Grid>
-        
+        <TextBlock x:Name="textBlock" FontSize="14" HorizontalAlignment="Left" Margin="100,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="142" Width="195">
+            Данная программа разработана для более удобного заучивания японских слов. Словари взяты с сайта <Hyperlink x:Name="krakozyabr" NavigateUri="http://krakozyabr.ru" Click="krakozyabr_Click">krakozyabr.ru</Hyperlink>
+            Порядок пользования программой описан в <Hyperlink x:Name="readme" NavigateUri=".\\ReadMe.txt" Click="readme_Click">ReadMe</Hyperlink>
+        </TextBlock>
+        <Image x:Name="image" Source="branch.jpg" HorizontalAlignment="Left" Height="142" Margin="10,10,0,0" VerticalAlignment="Top" Width="85"/>
+
     </Grid>
 </Window>
