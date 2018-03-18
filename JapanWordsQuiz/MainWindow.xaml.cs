@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace JapanWordsQuiz
 {
@@ -27,11 +27,12 @@ namespace JapanWordsQuiz
         int default_size;
         Dictionary<int, DictValue> dict = new Dictionary<int, DictValue>();
         string[] true_answers;
-        int dict_len, num_of_ans, addit_num_of_ans, num_of_quest, curr_index, dict_num;
+        int dict_len_l = 1, dict_len_h, num_of_ans, addit_num_of_ans, num_of_quest, curr_index, dict_num;
         public MainWindow()
         {
             InitializeComponent();
             RightSideIsActivated(false);
+            rand_len_textbox.IsEnabled = false;
             image.Visibility = Visibility.Hidden;
             ans_for_user.Visibility = Visibility.Visible;
             ans_switcher.IsChecked = true;
@@ -42,7 +43,7 @@ namespace JapanWordsQuiz
         private void LetNewWord()
         {
             Random r = new Random();
-            curr_index = r.Next(dict_len);
+            curr_index = r.Next(dict_len_h);
             true_answers = (string[])dict.Values.ElementAt(curr_index).line[num_of_ans].Clone();
             if (dict_num == 4)
             {
@@ -70,12 +71,29 @@ namespace JapanWordsQuiz
                 MessageBox.Show("Выберите тип теста");
                 return;
             }
-            if (!Int32.TryParse(dict_len_textblock.Text, out dict_len) || dict_len == 0)
+            if (!(bool)is_rand_chck_box.IsChecked)
             {
-                MessageBox.Show("В поле 'Количество слов' введите число больше нуля");
-                return;
+                if (!Int32.TryParse(dict_len_textblock.Text, out dict_len_h) || dict_len_h <= 0)
+                {
+                    MessageBox.Show("В поле 'Количество слов' введите число больше нуля");
+                    return;
+                }
+                if (!Int32.TryParse(dict_len_start_textblock.Text, out dict_len_l) || dict_len_l <= 1)
+                {
+                    MessageBox.Show("В поле 'Начиная с...' введите число больше единицы");
+                    return;
+                }
             }
-            if (dict_num == 4 && dict_len > 120 || dict_num == 2 && dict_len > 683 || dict_len > 704)
+            else
+            {
+                dict_len_l = 1;
+                if (!Int32.TryParse(rand_len_textbox.Text, out dict_len_h) || dict_len_h <= 0)
+                {
+                    MessageBox.Show("В поле 'Количество' введите число больше нуля");
+                    return;
+                }
+            }
+            if (dict_num == 4 && dict_len_l + dict_len_h - 1 > 120 || dict_num == 2 && dict_len_l + dict_len_h - 1 > 683 || dict_len_l + dict_len_h - 1 > 704)
             {
                 MessageBox.Show("Слишком большое число слов.");
                 return;
@@ -91,7 +109,7 @@ namespace JapanWordsQuiz
             }
             LeftSideIsActivated(false);
             RightSideIsActivated(true);
-            count_text_block.Text = dict_len.ToString();
+            count_text_block.Text = dict_len_h.ToString();
             LetNewWord();
         }
 
@@ -136,7 +154,25 @@ namespace JapanWordsQuiz
         private void LeftSideIsActivated(bool status)
         {
             StartButton.IsEnabled = status;
-            dict_len_textblock.IsEnabled = status;
+            is_rand_chck_box.IsEnabled = status;
+            if (status)
+            {
+                if ((bool)is_rand_chck_box.IsChecked)
+                {
+                    rand_len_textbox.IsEnabled = status;
+                }
+                else
+                {
+                    dict_len_textblock.IsEnabled = status;
+                    dict_len_start_textblock.IsEnabled = status;
+                }
+            }
+            else
+            {
+                rand_len_textbox.IsEnabled = status;
+                dict_len_textblock.IsEnabled = status;
+                dict_len_start_textblock.IsEnabled = status;
+            }
             radioButton.IsEnabled = status;
             radioButton1.IsEnabled = status;
             radioButton2.IsEnabled = status;
@@ -165,7 +201,7 @@ namespace JapanWordsQuiz
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
             dict = null;
-            dict_len = 0;
+            dict_len_h = 0;
             dict_num = 0;
             addit_num_of_ans = 0;
             num_of_ans = 0;
@@ -223,6 +259,24 @@ namespace JapanWordsQuiz
             Serialize();
         }
 
+        private void is_rand_chck_box_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(bool)is_rand_chck_box.IsChecked)
+            {
+                is_rand_chck_box.IsChecked = false;
+                rand_len_textbox.IsEnabled = false;
+                dict_len_textblock.IsEnabled = true;
+                dict_len_start_textblock.IsEnabled = true;
+            }
+            else
+            {
+                is_rand_chck_box.IsChecked = true;
+                rand_len_textbox.IsEnabled = true;
+                dict_len_textblock.IsEnabled = false;
+                dict_len_start_textblock.IsEnabled = false;
+            }
+        }
+
         private void ans_switcher_Click(object sender, RoutedEventArgs e)
         {
             if (!ans_switcher.IsChecked)
@@ -274,7 +328,7 @@ namespace JapanWordsQuiz
         int error_wait_time;
         private async void OK_button_Click(object sender, RoutedEventArgs e)
         {
-            if (dict_len == 0) return;
+            if (dict_len_h == 0) return;
             if (answer_text_box.Text == "")
             {
                 MessageBox.Show("Введите слово.");
@@ -303,8 +357,8 @@ namespace JapanWordsQuiz
             {
                 status_text_block.Text = "Правильно!";
                 dict.Remove(dict.Keys.ElementAt(curr_index));
-                dict_len--;
-                count_text_block.Text = dict_len.ToString();
+                dict_len_h--;
+                count_text_block.Text = dict_len_h.ToString();
                 await Task.Run(() => Thread.Sleep(1000));
             }
             else
@@ -318,7 +372,7 @@ namespace JapanWordsQuiz
             question_text_block.Text = "";
             ans_for_user.Text = "Ответ: ";
             OK_button.IsEnabled = true;
-            if (dict_len > 0)
+            if (dict_len_h > 0)
             {
                 status_text_block.Text = "...";
                 LetNewWord();
@@ -354,17 +408,42 @@ namespace JapanWordsQuiz
                 new_dict = (Dictionary<int, DictValue>)formatter.Deserialize(fs);
             }
             Dictionary<int, DictValue> ret_dict = new Dictionary<int, DictValue>();
-            int i = 1;
-            while (ret_dict.Count < dict_len)
+            int i;
+            if (!(bool)is_rand_chck_box.IsChecked)
             {
-                if (dict_num == 2)
+                i = dict_len_l;
+                while (ret_dict.Count < dict_len_h)
                 {
-                    string dbg = new_dict[i].line[1][0];
-                    if (dbg != "")
-                        ret_dict.Add(i, new_dict[i]);
+                    if (dict_num == 2)
+                    {
+                        string dbg = new_dict[i].line[1][0];
+                        if (dbg != "")
+                            ret_dict.Add(i, new_dict[i]);
+                    }
+                    else ret_dict.Add(i, new_dict[i]);
+                    ++i;
                 }
-                else ret_dict.Add(i, new_dict[i]);
-                ++i;
+            }
+            else
+            {
+                List<int> added_indexes = new List<int>();
+                Random r = new Random();
+                while (ret_dict.Count < dict_len_h)
+                {
+                    do
+                    {
+                        i = r.Next(1, new_dict.Count);
+                    }
+                    while (added_indexes.Contains(i));
+                    added_indexes.Add(i);
+                    if (dict_num == 2)
+                    {
+                        string dbg = new_dict[i].line[1][0];
+                        if (dbg != "")
+                            ret_dict.Add(i, new_dict[i]);
+                    }
+                    else ret_dict.Add(i, new_dict[i]);
+                }
             }
             return ret_dict;
         }
