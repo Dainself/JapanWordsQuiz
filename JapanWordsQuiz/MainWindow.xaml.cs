@@ -37,6 +37,8 @@ namespace JapanWordsQuiz
             ans_for_user.Visibility = Visibility.Visible;
             ans_switcher.IsChecked = true;
             error_wait_time = 3000;
+            //dev part
+            ser_txtbox.IsEnabled = false;
         }
 
         string[] true_answers2;
@@ -78,9 +80,9 @@ namespace JapanWordsQuiz
                     MessageBox.Show("В поле 'Количество слов' введите число больше нуля");
                     return;
                 }
-                if (!Int32.TryParse(dict_len_start_textblock.Text, out dict_len_l) || dict_len_l <= 1)
+                if (!Int32.TryParse(dict_len_start_textblock.Text, out dict_len_l) || dict_len_l <= 0)
                 {
-                    MessageBox.Show("В поле 'Начиная с...' введите число больше единицы");
+                    MessageBox.Show("В поле 'Начиная с...' введите число больше нуля");
                     return;
                 }
             }
@@ -110,6 +112,7 @@ namespace JapanWordsQuiz
             LeftSideIsActivated(false);
             RightSideIsActivated(true);
             count_text_block.Text = dict_len_h.ToString();
+            status_text_block.Text = "...";
             LetNewWord();
         }
 
@@ -245,18 +248,18 @@ namespace JapanWordsQuiz
             }
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void StartSer(string path)
         {
             dict = new Dictionary<int, DictValue>();
-            using (StreamReader sr = new StreamReader(@"C:\Users\user\source\repos\JapanWordsQuiz\N5_kanji.tsv"))
+            using (StreamReader sr = new StreamReader(".//"+ path +".tsv"))
             {
-                for (int counter = 0; counter < 120; counter++)
+                while (!sr.EndOfStream)//for (int counter = 0; counter < 120; counter++)
                 {
                     AnalyseLine(sr.ReadLine(), out int key, out DictValue value);
                     dict[key] = value;
                 }
             }
-            Serialize();
+            Serialize(path);
         }
 
         private void is_rand_chck_box_Click(object sender, RoutedEventArgs e)
@@ -274,6 +277,19 @@ namespace JapanWordsQuiz
                 rand_len_textbox.IsEnabled = true;
                 dict_len_textblock.IsEnabled = false;
                 dict_len_start_textblock.IsEnabled = false;
+            }
+        }
+
+        private void ser_txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (!DictTypeTryParse())
+            {
+                MessageBox.Show("Выберите тип теста");
+                return;
+            }
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                StartSer(ser_txtbox.Text);
             }
         }
 
@@ -380,7 +396,7 @@ namespace JapanWordsQuiz
             else status_text_block.Text = "Слова закончились.";
         }
 
-        private void Serialize()
+        private void Serialize(string path)
         {
             /*StringBuilder sb = new StringBuilder();
             for (int i = 1; i < dict_len; i++)
@@ -390,7 +406,7 @@ namespace JapanWordsQuiz
             }
             MessageBox.Show(sb.ToString());*/
             BinaryFormatter formatter = new BinaryFormatter();
-            using (FileStream fs = new FileStream(".\\dict_kanji.dat", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(".\\"+ path +".dat", FileMode.OpenOrCreate))
             {
                 formatter.Serialize(fs, dict);
             }
@@ -401,7 +417,7 @@ namespace JapanWordsQuiz
         {
             Dictionary<int, DictValue> new_dict;
             string path = (dict_num == 4) ? ".\\dict_kanji.dat" :
-                ".\\dict_goi.dat";
+                ".\\N5_goi.dat";
             BinaryFormatter formatter = new BinaryFormatter();
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {

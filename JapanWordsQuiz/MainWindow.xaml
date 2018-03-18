@@ -5,14 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JapanWordsQuiz"
         mc:Ignorable="d"
-        Title="Japan Words Quiz" Height="308.333" Width="525" ResizeMode="CanMinimize" Icon="a.ico">
+        Title="Japan Words Quiz" Height="315" Width="525" ResizeMode="CanMinimize" Icon="a.ico">
     <Grid>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Количество с"/><Run Text="лов"/><Run Text=":"/></TextBlock>
         <TextBox x:Name="dict_len_textblock" HorizontalAlignment="Left" Height="22" Margin="110,168,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="52"/>
         <TextBlock x:Name="question_text_block" HorizontalAlignment="Left" Margin="212,35,0,0" TextWrapping="Wrap" FontSize="25" VerticalAlignment="Top" Height="39" Width="278" Text="あ"/>
         <TextBox x:Name="answer_text_box" HorizontalAlignment="Left" Height="23" Margin="212,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="126" KeyDown="answer_text_box_KeyDown"/>
         <Button x:Name="OK_button" Content="OK" HorizontalAlignment="Left" Margin="343,80,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.312,-2.568" Click="OK_button_Click"/>
-        <TextBlock x:Name="status_text_block" FontSize="14" HorizontalAlignment="Left" Margin="395,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="95" Text="..."/>
         <Button x:Name="StartButton" Content="Начать &gt;&gt;" HorizontalAlignment="Left" Margin="37,244,0,0" VerticalAlignment="Top" Width="68" Height="25" Click="StartButton_Click"/>
         <TextBlock x:Name="textBlock3" FontSize="15" HorizontalAlignment="Left" Margin="13,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold"><Run Text="Режим "/><Run Text="теста"/></TextBlock>
         <RadioButton x:Name="radioButton" Content="Слова на хирагане -&gt; Русский" GroupName="Mode" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
@@ -22,6 +21,7 @@
         <TextBlock x:Name="textBlock4" HorizontalAlignment="Left" Margin="212,113,0,0" TextWrapping="Wrap" Text="Слов осталось:" VerticalAlignment="Top"/>
         <TextBlock x:Name="count_text_block" HorizontalAlignment="Left" Margin="299,113,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="31"/>
         <Image x:Name="image" Source="katana-tyan.png" HorizontalAlignment="Left" Height="128" Margin="357,107,0,0" VerticalAlignment="Top" Width="152"/>
+        <TextBlock x:Name="status_text_block" FontSize="14" HorizontalAlignment="Left" Margin="395,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="95" Text="..."/>
         <Button x:Name="back_button" Content=" &lt;&lt; Выбрать другой тест" HorizontalAlignment="Left" Margin="221,167,0,0" VerticalAlignment="Top" Width="148" Height="25" Click="back_button_Click">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0,1" Opacity="0.85" StartPoint="0,0">
@@ -51,5 +51,6 @@
         <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="13,219,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Количество"/><Run Text=":"/></TextBlock>
         <CheckBox x:Name="is_rand_chck_box" Content="Слова разбросом" HorizontalAlignment="Left" Margin="13,198,0,0" VerticalAlignment="Top" Click="is_rand_chck_box_Click"/>
         <TextBox x:Name="rand_len_textbox" HorizontalAlignment="Left" Height="23" Margin="85,216,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="52"/>
+        <TextBox x:Name="ser_txtbox" HorizontalAlignment="Left" Height="23" Margin="221,236,0,0" TextWrapping="Wrap" Text="N5_goi" VerticalAlignment="Top" Width="120" KeyDown="ser_txtbox_KeyDown"/>
     </Grid>
 </Window>
