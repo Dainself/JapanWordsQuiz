@@ -20,7 +20,7 @@
         <RadioButton x:Name="radioButton3" Content="Кандзи -&gt; Он/Кун" GroupName="Mode" HorizontalAlignment="Left" Margin="10,113,0,0" VerticalAlignment="Top" Checked="radioButton_Checked"/>
         <TextBlock x:Name="textBlock4" HorizontalAlignment="Left" Margin="212,113,0,0" TextWrapping="Wrap" Text="Слов осталось:" VerticalAlignment="Top"/>
         <TextBlock x:Name="count_text_block" HorizontalAlignment="Left" Margin="299,113,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="31"/>
-        <Image x:Name="image" Source="katana-tyan.png" HorizontalAlignment="Left" Height="128" Margin="357,107,0,0" VerticalAlignment="Top" Width="152"/>
+        <Image x:Name="image" Source="katana-tyan.png" HorizontalAlignment="Left" Height="128" Margin="357,141,0,0" VerticalAlignment="Top" Width="152"/>
         <TextBlock x:Name="status_text_block" FontSize="14" HorizontalAlignment="Left" Margin="395,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="95" Text="..."/>
         <Button x:Name="back_button" Content=" &lt;&lt; Выбрать другой тест" HorizontalAlignment="Left" Margin="221,167,0,0" VerticalAlignment="Top" Width="148" Height="25" Click="back_button_Click">
             <Button.Background>
@@ -36,6 +36,12 @@
             </Button.BorderBrush>
         </Button>
         <Menu x:Name="menu" Height="21" VerticalAlignment="Top">
+            <MenuItem Header="Режим">
+                <MenuItem x:Name="level_mode"  Height="21" Header="Уровень">
+                    <MenuItem x:Name="N5" Height="21" Header="N5" IsCheckable="True" Checked="N5_Checked"></MenuItem>
+                    <MenuItem x:Name="N4" Height="21" Header="N4" IsCheckable="True" Checked="N4_Checked"></MenuItem>
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="Вид">
                 <MenuItem x:Name="image_switcher" Height="21" Header="Картинка в углу" IsCheckable="True" Click="image_switcher_Click" />
                 <MenuItem x:Name="ans_switcher" Height="21" Header="Показывать ответы при ошибках" IsCheckable="True" Click="ans_switcher_Click"/>
