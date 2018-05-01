@@ -321,9 +321,10 @@ namespace JapanWordsQuiz
                 MessageBox.Show("Введите слово.");
                 return;
             }
+            bool cond = IsUserRight(out string ans_str);
             OK_button.IsEnabled = false;
             answer_text_box.Text = "";
-            if (IsUserRight(out string ans_str))
+            if (cond)
             {
                 status_text_block.Text = "Правильно!";
                 dict.Remove(dict.Keys.ElementAt(curr_index));
